@@ -1,1 +1,115 @@
 Kafka Notes for dev
+
+*Docker composer for Kafka instance
+--------------------------------
+version: '2'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+--------------------------------
+*Maven libraries for Spring boot
+<dependency>
+    <groupId>org.apache.kafka</groupId>
+    <artifactId>kafka-streams</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+--------------------------------
+*annotation for enable the kafka @EnableKafka
+--------------------------------
+*application.properties for producer
+# Producer properties
+spring.kafka.producer.bootstrap-servers=localhost:29092
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.group-id=group_id
+topic.name.producer=topic.example.kafka
+
+# Common Kafka Properties
+auto.create.topics.enable=true
+----------------------------------------
+*add kafka producer config class
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class KafkaTopicProducer {
+
+    @Value("${topic.name.producer}")
+    private String topicName;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public void send(String message){
+        log.info("Payload message: {}", message);
+        kafkaTemplate.send(topicName, message);
+    }
+}
+*Controller to produce the- message
+@RequestMapping("/kafka")
+public class KafkaController {
+
+    @Autowired
+    private KafkaTopicProducer topicProducer;
+
+    @GetMapping(value = "/send")
+    public void send(@RequestParam String message){
+        topicProducer.send(message);
+    }
+}
+--------------------------------------
+*application.properties for producer
+
+server.port=8081
+# Kafka Consumer properties
+spring.kafka.consumer.bootstrap-servers=localhost:29092
+spring.kafka.consumer.group-id=group_id
+spring.kafka.consumer.auto-offset-reset=earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+topic.name.consumer=topic.example.kafka
+---------------------------------------
+*annotation for enable the kafka @EnableKafka
+--------------------------------------
+*Java config class for Kafka listner
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class KafkaTopicConsumer {
+    @Value("${topic.name.consumer}")
+    private String topicName;
+
+    @KafkaListener(topics = "${topic.name.consumer}", groupId = "group_id")
+    public void consume(ConsumerRecord<String, String> payload) {
+        log.info("Topic: {}", topicName);
+        log.info("key: {}", payload.key());
+        log.info("Headers: {}", payload.headers());
+        log.info("Partion: {}", payload.partition());
+        log.info("Order: {}", payload.value());
+    }
+}
+-------------------------------------------
+
+
+
