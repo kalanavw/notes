@@ -1,0 +1,23 @@
+- CIDR (Classless Inter-Domain Routing), Private vs Public IP
+  - method for allocationg IP adresses
+- Default VPC
+  	- all new accounts have a default VPC
+- VPC - IPv4
+  -	can have multiple VPCs in an AWS region (MAX 5 per region - soft limit)
+  -	MAX CIDR per VPC is 5, for each CIDR
+    - Min size is /28 (16 Ip Addresses)
+    - Max size is /16 (65536 IP addresses)
+	- Because VPS is private, Only the Private IPv4 ranges are allowed
+- VPC - Subnet(IPv4)
+  - AES reserves 5 IP addresses (first 4 and last 1) in each subnet
+  - These IP addresses are not available for use and can't be assigned to an EC2 instance
+  - Example: if CIDR block 10.0.0.0/24, then reserved IP addresses are
+    - 10.0.0.0 - Network Address
+    - 10.0.0.1 - reserved for VPC router
+    - 10.0.0.2 - for mapping to Amazon-provided DNS
+    - 10.0.0.3 - for future user
+    - 10.0.0.255 - Network broadcast address, AWS does not support broadcast in a VPC, therfore the address is reserved
+- Internet Gateway (IGW)
+  	- Allow resources in a vpc to connect Internet
+  	- 
+    	
