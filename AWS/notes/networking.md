@@ -1,11 +1,11 @@
 - CIDR (Classless Inter-Domain Routing), Private vs Public IP
-  - method for allocationg IP adresses
+  - method for allocating IP adresses
 - Default VPC
   	- all new accounts have a default VPC
 - VPC - IPv4
   - can have multiple VPCs in an AWS region (MAX 5 per region - soft limit)
   - MAX CIDR per VPC is 5, for each CIDR
-  - Min size is /28 (16 Ip Addresses)
+  - Min size is /28 (16 IP addresses)
   - Max size is /16 (65536 IP addresses)
 	- Because VPS is private, Only the Private IPv4 ranges are allowed
 - VPC - Subnet(IPv4)
@@ -16,50 +16,50 @@
     - 10.0.0.1 - reserved for VPC router
     - 10.0.0.2 - for mapping to Amazon-provided DNS
     - 10.0.0.3 - for future user
-    - 10.0.0.255 - Network broadcast address, AWS does not support broadcast in a VPC, therfore the address is reserved
+    - 10.0.0.255 - Network broadcast address, AWS does not support broadcast in a VPC, therefore the address is reserved
 - Internet Gateway (IGW)
-	- Allow resources in a vpc to connect Internet
+	- Allow resources in a VPC to connect to the Internet
 	- Scaled horizontally and has HA
-	- One  VOC can only be attached to one IGW and wise versa
+	- One  VOC can only be attached to one IGW and vice versa
 	- Route tables must be edited
 - Bastion Host
   - use to SSh into our private EC2 instances
-  - Bation Host security group must allow inbound from the internet on port 22 from restricted CIDR, Ex - public CIDR of your corporation
-  - Security Group of the EC2 instances must alllow the Security Group of the Bastion Host
+  - Bastion Host security group must allow inbound from the internet on port 22 from restricted CIDR, Ex - public CIDR of your corporation
+  - The Security Group of the EC2 instances must allow the Security Group of the Bastion Host
 - NAT instance - Network Address Translation
   - Allow EC2 instances in private subnets to connect to the internet
-  - Must be launched in public subnet
+  - Must be launched in the public subnet
   - Must disable EC2 settings: Source/ destination Check
   - Must have Elastic IP attached to it
   - Route table must be configured to route traffic from private subnets to the NAT instance
-  - for ping command, we need to enable icmp port
+  - for the ping command, we need to enable the ICMP port
 - NAT Gateway
   - AWS managed NAT, HA
   - Can't be used by EC2 instance in the same subnet (only from the other subnets)
   - Requires an IGW (Private Subnet => NATGW => IGW)
   - 5 Gbps of bandwidth with automated scaling up to 100Gbps
-  - Is resilient withiin a single AZ
-  - Must create multiple NAT in multiple AZ
+  - Is resilient within a single AZ
+  - Must create multiple NATs in multiple AZ
 - NACL (Network ACL) & Security Groups
   - NACL - stateless & SG - stateful
-  - NACL are like a firewall which control traffic drom and to subnets
+  - NACLs are like a firewall that controls traffic from and to subnets
   - One NACL or subnet, subnets are assigned the Default NACL
-  - NACL rule have a number, first rule match will drive the decision
-  - Newly creted NACLs will deny everything
-  - NACLs are great way of blocking a specific IP address at the subnet level
+  - The NACL rule has a number, the first rule match will drive the decision
+  - Newly created NACLs will deny everything
+  - NACLs are a great way of blocking a specific IP address at the subnet level
   - Ephemeral Ports
     - For any two endpoints to establish a connection, they must use ports
 - VPC Peering
-  - privetly connect two VPCs using AWS network
+  - privately connect two VPCs using AWS network
   - Make them behave as if they were in the same network
   - Must not have overlapping CIDRs
 - VPC Endpoints
-  - to connect other AWS services without connecting through internet
+  - to connect other AWS services without connecting through the internet
   - every AWS service is publicly exposed
-  - VPC Endpoints(Powered by AWS PrivateLink) allows you to connect to AWS service using a private network instead a using the public internet
+  - VPC Endpoints(Powered by AWS PrivateLink) allows you to connect to AWS service using a private network instead of using the public internet
   - redundant and scale horizontally
   - Types of endpoints
-    - interface  - powered by privatelink
+    - interface  - powered by private link
     - Gateway Endpoint - free
-      -supports both s3 and DynamoDB
+      - supports both s3 and DynamoDB 
     	
