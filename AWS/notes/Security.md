@@ -30,7 +30,7 @@
         - Private - only in VPC
 * AWS WAF - Web  Application Firewall
     - Layer 7 is HTTP
-    - protect we application from common web exploits
+    - protect our application from common web exploits
     - Deploy on
         - Application Load Balancer
         - API Gateway  
@@ -38,11 +38,11 @@
         - AppSync GrapQL API
         - Cognito user pool
     - Define WEB Acl (Access ControlList)
-    - Web ACL are Regional except for CloudFront
+    - Web ACLs are Regional except for CloudFront
     - A rule group is a reusable set of rules that you can add to a web ACL
     - Does not support the NLB
     - Can use Global Accelerator for fixed IP and WAF on the ALB
-- AWS Shield : Protect from DDoS attack
+- AWS Shield: Protect from DDoS attack
   -  DDos: Distributed Denial of Service - many requests at the same time
   -  Free service
   -  protect from attacks such as SYN/UDP floods, Reflection attacks, and other layer 3 & 4 attacks
@@ -77,3 +77,4 @@
 - Amazon Macie
   - Fully managed data security and data privacy service
   - uses ML & pattern matching to discover and protect the sensitive data in AWS
+
