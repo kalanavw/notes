@@ -56,10 +56,40 @@
 - VPC Endpoints
   - to connect other AWS services without connecting through the internet
   - every AWS service is publicly exposed
-  - VPC Endpoints(Powered by AWS PrivateLink) allows you to connect to AWS service using a private network instead of using the public internet
+  - VPC Endpoints(Powered by AWS PrivateLink) allows you to connect to AWS service using a private --network instead of using the public internet
   - redundant and scale horizontally
   - Types of endpoints
     - interface  - powered by private link
     - Gateway Endpoint - free
       - supports both s3 and DynamoDB 
-    	
+- AWS Site-to-Site VPN
+  - Virtual Private Gateway(VGW)
+     - VPN concentrator on the AWS side of the VPN connection
+     - Possibility to customize the ASN (Autonomous System number)
+  - Customer Gateway(CGW)
+    - Software or physical device on the customer side of the VPN connection
+- AWS VPN CloudHub
+  - provide secure communication between multiple sites
+  - Low-cost hub-and-spoke model for VPN in different locations
+  - Goes over the internet
+  - routing table must
+ 
+- Direct Connect(DX)
+  - provide a dedicated private connection from a remote network to your VPC
+  - Direct Connect Gateway
+    - connect to multiple AWS regions
+    - Connection Types
+      - Dedicated Connections
+      - Hosted Connections
+- Transit Gateway
+  - provide IP multicasting
+  - connect multiple VPCs and remote data centers using one transit gateway
+  - Site-to-site ECMP
+    - ECMP = Equal Cost Multi-Path routing
+    - routing strategy to allow forwarding a packet over multiple best path
+    - use case - increase the bandwidth of your connections to AWS
+- VPC - Traffic Mirroring
+  - Allows you to capture and inspect network traffic in your VPC
+  - Capture the traffic
+    - From (Source) ENIs
+    - To (Target) an ENI or a Network Load Balancer
